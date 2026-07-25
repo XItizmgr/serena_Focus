@@ -23,7 +23,7 @@ body {
 .header {
   display: flex;
   align-items: center;
-  padding: 14px 18px;
+  padding: 12px 16px;
   background: var(--bg-main);
 }
 
@@ -46,7 +46,7 @@ body {
 }
 
 .container {
-  padding: 0 18px 18px;
+  padding: 0 16px 16px;
 }
 
 /* TIMER CARD */
@@ -55,27 +55,27 @@ body {
   flex-direction: column;
   align-items: center;
   background: var(--card-bg);
-  padding: 20px 16px;
+  padding: 16px 14px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   box-shadow: 0 2px 10px rgba(168, 75, 41, 0.04);
 }
 
 .timer-ring {
-  width: 140px;
-  height: 140px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   border: 3px solid var(--accent-brown);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .timer-time {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 700;
   color: var(--accent-brown);
 }
@@ -85,12 +85,11 @@ body {
   color: var(--text-muted);
 }
 
-/* BUTTON CONTROLS & TRANSITIONS */
 .controls-row {
   display: flex;
   gap: 12px;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .action-btn {
@@ -99,17 +98,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.15s ease, background-color 0.2s ease;
 }
 
-/* Play/Pause Main Button */
 .play-btn {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background-color: var(--accent-brown);
   color: white;
-  font-size: 16px;
+  font-size: 15px;
   box-shadow: 0 4px 10px rgba(168, 75, 41, 0.25);
 }
 
@@ -122,14 +120,13 @@ body {
   transform: scale(0.92);
 }
 
-/* Reset Button */
 .reset-btn {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background-color: var(--accent-light);
   color: var(--accent-brown);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
 }
 
@@ -138,17 +135,12 @@ body {
   transform: rotate(-30deg);
 }
 
-.reset-btn:active {
-  transform: scale(0.90);
-}
-
 .status-text {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-/* Custom Mins Input */
 .duration-input-wrapper {
   display: flex;
   align-items: center;
@@ -167,22 +159,22 @@ body {
   font-size: 12px;
 }
 
-/* BLOCKLIST SECTION */
+/* BLOCKLIST */
 .blocklist-section h3 {
   font-size: 13px;
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
   color: var(--accent-brown);
 }
 
 .input-group {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .input-group input {
   flex: 1;
-  padding: 9px 12px;
+  padding: 8px 12px;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   font-size: 12px;
@@ -194,7 +186,7 @@ body {
   background: var(--accent-brown);
   color: white;
   border: none;
-  padding: 0 16px;
+  padding: 0 14px;
   border-radius: var(--radius-md);
   font-weight: 700;
   font-size: 11px;
@@ -215,7 +207,7 @@ body {
   justify-content: space-between;
   font-size: 11px;
   color: var(--text-muted);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .badge {
@@ -231,7 +223,7 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 150px;
+  max-height: 120px;
   overflow-y: auto;
 }
 
@@ -240,10 +232,10 @@ body {
   align-items: center;
   justify-content: space-between;
   background: var(--card-bg);
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-size: 12px;
 }
 
@@ -270,4 +262,10 @@ body {
 .delete-btn:hover {
   color: #e53e3e;
   transform: scale(1.15);
+}
+.header-logo {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  border-radius: 4px;
 }

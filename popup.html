@@ -1,62 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Serene Focus</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serene Focus</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo-title">
+        <img src="logo.png" alt="Logo" class="header-logo" />
+        <h1>Serene Focus</h1>
+      </div>
+    </header>
 
-  <header class="header">
-    <div class="logo-title">
-      <h1>Serene Focus</h1>
-    </div>
-  </header>
+    <main class="container">
+      <div class="timer-card">
+        <div class="timer-ring">
+          <div id="timer" class="timer-time">25:00</div>
+          <div class="timer-sub">Deep Work</div>
+        </div>
 
-  <main class="container">
+        <div class="controls-row">
+          <button id="playPauseBtn" class="action-btn play-btn">
+            <span id="playIcon">▶</span>
+          </button>
+          <button id="resetBtn" class="action-btn reset-btn" title="Reset Timer">↺</button>
+        </div>
 
+        <div id="status" class="status-text">Status: Idle</div>
 
-    <div class="timer-card">
-      <div class="timer-ring">
-        <div id="timer" class="timer-time">25:00</div>
-        <div class="timer-sub">Deep Work</div>
+        <div class="duration-input-wrapper">
+          <label for="customMinutes">Session Duration (mins):</label>
+          <input type="number" id="customMinutes" value="25" min="1" max="300" />
+        </div>
       </div>
 
-      <div class="controls-row">
-        <button id="playPauseBtn" class="action-btn play-btn">
-          <span id="playIcon">▶</span>
-        </button>
-        <button id="resetBtn" class="action-btn reset-btn" title="Reset Timer">
-          ↺
-        </button>
-      </div>
-      
-      <div id="status" class="status-text">Status: Idle</div>
-      <div class="duration-input-wrapper">
-        <label for="customMinutes">Session Duration (mins):</label>
-        <input type="number" id="customMinutes" value="25" min="1" max="180">
-      </div>
-    </div>
+      <section class="blocklist-section">
+        <h3>Blocked Sites</h3>
 
-    <section class="blocklist-section">
-      <h3>Blocked Sites</h3>
-      
-      <div class="input-group">
-        <input type="text" id="site" placeholder="Add site (e.g. reddit.com)">
-        <button id="addbtn" class="add-btn">ADD</button>
-      </div>
+        <div class="input-group">
+          <input type="text" id="site" placeholder="Add site (e.g. reddit.com)" />
+          <button id="addbtn" class="add-btn">ADD</button>
+        </div>
 
-      <div class="list-header">
-        <span>Blocked Sites</span>
-        <span id="siteCount" class="badge">0 SITES</span>
-      </div>
+        <div class="list-header">
+          <span>Blocked Sites</span>
+          <span id="siteCount" class="badge">0 SITES</span>
+        </div>
 
-      <ul id="siteList" class="site-list"></ul>
-    </section>
+        <ul id="siteList" class="site-list"></ul>
+      </section>
+    </main>
 
-  </main>
+   
 
-  <script src="popup.js"></script>
-</body>
+    <script src="popup.js"></script>
+  </body>
 </html>

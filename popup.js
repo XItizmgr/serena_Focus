@@ -4,7 +4,6 @@ let timerInterval = null;
 let remainingSeconds = 25 * 60;
 let isRunning = false;
 
-
 const playPauseBtn = document.getElementById("playPauseBtn");
 const playIcon = document.getElementById("playIcon");
 const resetBtn = document.getElementById("resetBtn");
@@ -17,10 +16,12 @@ const addbtn = document.getElementById("addbtn");
 const siteList = document.getElementById("siteList");
 const siteCount = document.getElementById("siteCount");
 
-
 document.addEventListener("DOMContentLoaded", () => {
+  chrome.storage.local.get(["remainingSeconds", "isRunning", "endTime", "blockedDomains", "customDuration"], (data) => {
+    if (data.customDuration) {
+      customMinutesInput.value = data.customDuration;
+    }
 
-  chrome.storage.local.get(["remainingSeconds", "isRunning", "endTime", "blockedDomains"], (data) => {
     let domains = data.blockedDomains || default_sites;
     if (!data.blockedDomains) {
       chrome.storage.local.set({ blockedDomains: domains });
@@ -28,23 +29,25 @@ document.addEventListener("DOMContentLoaded", () => {
     renderlist(domains);
 
     if (data.isRunning && data.endTime) {
-
       const now = Date.now();
       const remaining = Math.max(0, Math.floor((data.endTime - now) / 1000));
       if (remaining > 0) {
         remainingSeconds = remaining;
         startTimer();
       } else {
+        alert("Break time! Now itssss timee forr u to do whatteverrr u wantt TwT .....");
         resetTimer();
       }
     } else if (data.remainingSeconds) {
-
       remainingSeconds = data.remainingSeconds;
+      updateDisplay();
+    } else {
+      const mins = parseInt(customMinutesInput.value) || 25;
+      remainingSeconds = mins * 60;
       updateDisplay();
     }
   });
 });
-
 
 playPauseBtn.addEventListener("click", () => {
   if (isRunning) {
@@ -58,10 +61,11 @@ resetBtn.addEventListener("click", () => {
   resetTimer();
 });
 
-customMinutesInput.addEventListener("change", () => {
+customMinutesInput.addEventListener("input", () => {
   if (!isRunning) {
-    const mins = Math.max(1, parseInt(customMinutesInput.value) || 25);
+    const mins = Math.max(1, parseInt(customMinutesInput.value) || 1);
     remainingSeconds = mins * 60;
+    chrome.storage.local.set({ customDuration: mins, remainingSeconds });
     updateDisplay();
   }
 });
@@ -87,7 +91,7 @@ function startTimer() {
 
     if (remainingSeconds <= 0) {
       clearInterval(timerInterval);
-      alert("Focus Session Finished!");
+      alert("Break time! Now itssss timee forr u to do whatteverrr u wantt TwT .....");
       resetTimer();
     }
   }, 1000);
@@ -98,7 +102,6 @@ function pauseTimer() {
   clearInterval(timerInterval);
   playIcon.textContent = "▶";
   statusDisplay.textContent = "Status: Paused ⏸";
-
 
   updateBlockingRules([], false);
   chrome.storage.local.set({ isRunning: false, remainingSeconds, endTime: null });
@@ -124,6 +127,7 @@ function updateDisplay() {
   const secs = String(remainingSeconds % 60).padStart(2, "0");
   timerDisplay.textContent = `${mins}:${secs}`;
 }
+
 
 function getfaviconUrl(domain) {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
@@ -192,7 +196,10 @@ function updateBlockingRules(domains, shouldBlock) {
         id: index + 1,
         priority: 1,
         action: { type: "block" },
-        condition: { urlFilter: `||${domain}^`, resourceTypes: ["main_frame"] },
+        condition: { 
+          urlFilter: `||${domain}^`,
+          resourceTypes: ["main_frame", "sub_frame", "xmlhttprequest", "websocket", "other"]
+        },
       }))
     : [];
 
@@ -204,3 +211,4 @@ function updateBlockingRules(domains, shouldBlock) {
     });
   });
 }
+

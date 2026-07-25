@@ -1,16 +1,23 @@
 {
     "manifest_version": 3,
-    "name": "Site Focus & Break Timer",
+    "name": "Serene Focus",
     "version": "1.0",
-    "description": "When u need to focus block distracting sites",
+    "description": "Focus timer with custom site blocklist.",
+    "icons": {
+        "16": "logo.png",
+        "48": "logo.png",
+        "128": "logo.png"
+    },
     "permissions": [
         "storage",
-        "declarativeNetRequest"
+        "declarativeNetRequest",
+        "declarativeNetRequestWithHostAccess"
     ],
     "host_permissions": [
         "<all_urls>"
     ],
-    "action":{
-        "default_popup":"popup.html"
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "logo.png"
     }
 }
