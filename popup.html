@@ -1,17 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serene Focus</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Start Focus</h2>
-    <div id="timer">50:00</div>
-    <button id="togglebtn">Start focus mode</button>
-    <div id="status"> Status:idle</div>
-    <script src="popup.js"></script>
-    
+
+  <header class="header">
+    <div class="logo-title">
+      <h1>Serene Focus</h1>
+    </div>
+  </header>
+
+  <main class="container">
+
+
+    <div class="timer-card">
+      <div class="timer-ring">
+        <div id="timer" class="timer-time">25:00</div>
+        <div class="timer-sub">Deep Work</div>
+      </div>
+
+      <div class="controls-row">
+        <button id="playPauseBtn" class="action-btn play-btn">
+          <span id="playIcon">▶</span>
+        </button>
+        <button id="resetBtn" class="action-btn reset-btn" title="Reset Timer">
+          ↺
+        </button>
+      </div>
+      
+      <div id="status" class="status-text">Status: Idle</div>
+      <div class="duration-input-wrapper">
+        <label for="customMinutes">Session Duration (mins):</label>
+        <input type="number" id="customMinutes" value="25" min="1" max="180">
+      </div>
+    </div>
+
+    <section class="blocklist-section">
+      <h3>Blocked Sites</h3>
+      
+      <div class="input-group">
+        <input type="text" id="site" placeholder="Add site (e.g. reddit.com)">
+        <button id="addbtn" class="add-btn">ADD</button>
+      </div>
+
+      <div class="list-header">
+        <span>Blocked Sites</span>
+        <span id="siteCount" class="badge">0 SITES</span>
+      </div>
+
+      <ul id="siteList" class="site-list"></ul>
+    </section>
+
+  </main>
+
+  <script src="popup.js"></script>
 </body>
 </html>

@@ -1,98 +1,145 @@
-const Timer_seconds = 50 * 60;
-const default_site = ["youtube.com", "instgram.com", "facebook.com"];
-let timerInterval = null;
+const default_sites = ["youtube.com", "instagram.com", "facebook.com"];
 
-const toggleBtn = document.getElementById("togglebtn");
+let timerInterval = null;
+let remainingSeconds = 25 * 60;
+let isRunning = false;
+
+
+const playPauseBtn = document.getElementById("playPauseBtn");
+const playIcon = document.getElementById("playIcon");
+const resetBtn = document.getElementById("resetBtn");
 const timerDisplay = document.getElementById("timer");
 const statusDisplay = document.getElementById("status");
+const customMinutesInput = document.getElementById("customMinutes");
+
 const inputForsite = document.getElementById("site");
 const addbtn = document.getElementById("addbtn");
 const siteList = document.getElementById("siteList");
+const siteCount = document.getElementById("siteCount");
+
 
 document.addEventListener("DOMContentLoaded", () => {
-  chrome.storage.local.get(["endTime", "isFocusing"], (data) => {
-    if (data.isFocusing && data.endTime) {
-      startCountdown(data.endTime);
-    }
-  });
 
-  chrome.storage.Local.get(["blockedDomains"], (data) => {
-    let domains = data.blockDomains;
-    if (!domains) {
-      domains = default_site;
-      chrome.storage.Local.set({ blockedDomains: domains });
+  chrome.storage.local.get(["remainingSeconds", "isRunning", "endTime", "blockedDomains"], (data) => {
+    let domains = data.blockedDomains || default_sites;
+    if (!data.blockedDomains) {
+      chrome.storage.local.set({ blockedDomains: domains });
     }
-
     renderlist(domains);
 
-    (chrome.storage.local.get(["isFocusing"]),
-      (res) => {
-        if (res.isFocusing) {
-          updateBlockingRules(domains, true);
-        }
-      });
-  });
-});
+    if (data.isRunning && data.endTime) {
 
-toggleBtn.addEventListener("click", () => {
-  chrome.storage.local.get9(["isFocusing"], (data) => {
-    if (data.isFocusing) {
-      stopFocusMode();
-    } else {
-      startFocusMode();
+      const now = Date.now();
+      const remaining = Math.max(0, Math.floor((data.endTime - now) / 1000));
+      if (remaining > 0) {
+        remainingSeconds = remaining;
+        startTimer();
+      } else {
+        resetTimer();
+      }
+    } else if (data.remainingSeconds) {
+
+      remainingSeconds = data.remainingSeconds;
+      updateDisplay();
     }
   });
 });
 
-function startFocusMode() {
-  const endTime = Date.now() + Timer_seconds * 1000;
-  chrome.storage.local.get(["blockedDomains"], (data) => {
-    const domains = data.blockedDomains || default_site;
-    updateBlockingRules(domains, true);
-  });
-  chrome.storage.local.set({ isFocusing: true, endTime });
-  startCountdown(endTime);
-}
 
-function stopFocusMode() {
-  clearInterval(timerInterval);
-  updateBlockingRules([], false);
-  chrome.storage.local.set({ isFocusing: false, endTime: null });
-
-  if (timerDisplay) timerDisplay.textContent = "25:00";
-  if (statusDisplay) statusDisplay.textContent = "Status:idle";
-  if (toggleBtn) toggleBtn.textContent = "Start Focus Mode";
-}
-
-function startCountdown(endTime) {
-  if (toggleBtn) toggleBtn.textContent = "Stop Focus Mode";
-  if (statusDisplay) statusDisplay.textContent = "Status:blocking distraction";
-  function update() {
-    const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
-    const mins = String(Math.floor(remaining / 60)).padStart(2, "0");
-    const secs = String(remaining % 60).padStart(2, "0");
-
-    if (timerDisplay) timerDisplay.textContent = `${mins}:${secs}`;
-
-    if (remaining <= 0) {
-      stopFocusMode();
-      alert("Focus session Complete ! time to take a break.");
-    }
+playPauseBtn.addEventListener("click", () => {
+  if (isRunning) {
+    pauseTimer();
+  } else {
+    startTimer();
   }
-  update();
-  timerInterval = setInterval(update, 1000);
+});
+
+resetBtn.addEventListener("click", () => {
+  resetTimer();
+});
+
+customMinutesInput.addEventListener("change", () => {
+  if (!isRunning) {
+    const mins = Math.max(1, parseInt(customMinutesInput.value) || 25);
+    remainingSeconds = mins * 60;
+    updateDisplay();
+  }
+});
+
+function startTimer() {
+  isRunning = true;
+  playIcon.textContent = "❚❚";
+  statusDisplay.textContent = "Status: Focusing ";
+  customMinutesInput.disabled = true;
+
+  const endTime = Date.now() + remainingSeconds * 1000;
+  chrome.storage.local.set({ isRunning: true, endTime });
+
+
+  chrome.storage.local.get(["blockedDomains"], (data) => {
+    updateBlockingRules(data.blockedDomains || default_sites, true);
+  });
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    remainingSeconds = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+    updateDisplay();
+
+    if (remainingSeconds <= 0) {
+      clearInterval(timerInterval);
+      alert("Focus Session Finished!");
+      resetTimer();
+    }
+  }, 1000);
 }
+
+function pauseTimer() {
+  isRunning = false;
+  clearInterval(timerInterval);
+  playIcon.textContent = "▶";
+  statusDisplay.textContent = "Status: Paused ⏸";
+
+
+  updateBlockingRules([], false);
+  chrome.storage.local.set({ isRunning: false, remainingSeconds, endTime: null });
+}
+
+function resetTimer() {
+  isRunning = false;
+  clearInterval(timerInterval);
+  playIcon.textContent = "▶";
+  statusDisplay.textContent = "Status: Idle";
+  customMinutesInput.disabled = false;
+
+  const mins = Math.max(1, parseInt(customMinutesInput.value) || 25);
+  remainingSeconds = mins * 60;
+  updateDisplay();
+
+  updateBlockingRules([], false);
+  chrome.storage.local.set({ isRunning: false, remainingSeconds, endTime: null });
+}
+
+function updateDisplay() {
+  const mins = String(Math.floor(remainingSeconds / 60)).padStart(2, "0");
+  const secs = String(remainingSeconds % 60).padStart(2, "0");
+  timerDisplay.textContent = `${mins}:${secs}`;
+}
+
 function getfaviconUrl(domain) {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
 }
+
 function renderlist(domains) {
+  if (!siteList) return;
   siteList.innerHTML = "";
+  if (siteCount) siteCount.textContent = `${domains.length} SITES`;
+
   domains.forEach((domain) => {
     const li = document.createElement("li");
     li.className = "site-item";
     li.innerHTML = `
-    <div class="site-info">
-        <img class="site-icon" src="${getFaviconUrl(domain)}" alt="icon" onerror="this.src='https://google.com/favicon.ico'" />
+      <div class="site-info">
+        <img class="site-icon" src="${getfaviconUrl(domain)}" alt="icon" onerror="this.src='https://google.com/favicon.ico'" />
         <span>${domain}</span>
       </div>
       <button class="delete-btn" data-domain="${domain}">✕</button>
@@ -105,39 +152,34 @@ function renderlist(domains) {
   });
 }
 
-if (addbtn) {
-  addbtn.addEventListener("click", () => {
-    let domain = siteInput.value.trim().toLowerCase();
-    domain = domain.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split("/")[0];
-    if (!domain) return;
-    chrome.storage.local(["blockedDomains", "isFocusing"], (data) => {
-      const currentDomains = data.blockDomains || default_site;
+addbtn.addEventListener("click", () => {
+  let domain = inputForsite.value.trim().toLowerCase();
+  domain = domain.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split("/")[0];
+  if (!domain) return;
 
-      if (!currentDomains.includes(domain)) {
-        const updateDomains = [...currentDomains, domain];
-        chrome.storage.local.set({ blockDomains: updateDomains }, () => {
-          renderlist(updateDomains);
-          siteInput.value = "";
-
-          if (data.isFocusing) {
-            updateBlockingRules(updateDomains, true);
-          }
-        });
-      }
-    });
+  chrome.storage.local.get(["blockedDomains"], (data) => {
+    const currentDomains = data.blockedDomains || default_sites;
+    if (!currentDomains.includes(domain)) {
+      const updatedDomains = [...currentDomains, domain];
+      chrome.storage.local.set({ blockedDomains: updatedDomains }, () => {
+        renderlist(updatedDomains);
+        inputForsite.value = "";
+        if (isRunning) {
+          updateBlockingRules(updatedDomains, true);
+        }
+      });
+    }
   });
-}
+});
 
-// remove domain
 function removeDomain(domainToRemove) {
-  chrome.storage.local.get(["blockedDomains", "isFocusing"], (data) => {
+  chrome.storage.local.get(["blockedDomains"], (data) => {
     const currentDomains = data.blockedDomains || [];
     const updatedDomains = currentDomains.filter((d) => d !== domainToRemove);
 
     chrome.storage.local.set({ blockedDomains: updatedDomains }, () => {
-      renderList(updatedDomains);
-
-      if (data.isFocusing) {
+      renderlist(updatedDomains);
+      if (isRunning) {
         updateBlockingRules(updatedDomains, true);
       }
     });
