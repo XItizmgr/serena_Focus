@@ -1,31 +1,29 @@
-# Serena Focus
+# What is serena focus ?
 
-**Serena Focus** is a Chrome extension designed to eliminate online distractions and help you stay focused while coding, studying, or working on important tasks.
-
----
-
-##  How to Install
-
-1. Click the green **Code** button at the top of this repository and select **Download ZIP**.
-   
-   <img width="1860" height="1011" alt="Download ZIP step" src="https://github.com/user-attachments/assets/fbd5b861-ad5d-44dc-a62e-b4ff1a60b023" />
-
-2. Extract the downloaded ZIP file using WinRAR, 7-Zip, or your system's default archive manager. 
-<img width="1432" height="871" alt="Serena Focus UI" src="https://github.com/user-attachments/assets/2ebe1d63-c328-4969-a64a-629745739b66" />
-3. Open your browser and navigate to the **Extensions Manager** (`chrome://extensions` in Chrome).
-  
-4. Enable **Developer mode** in the top right corner.
-5. Click **Load unpacked** in the top left corner and select the extracted folder.
-
----
-
-##  How to Use
-
-Once installed, click on the extension icon to open the interface.
-
-<img width="1873" height="1063" alt="Developer Mode toggle" src="https://github.com/user-attachments/assets/1950e38b-e38a-4594-b5c3-dbf21b71f4ba" />
+Serena Focus is an chrome extension which help can help u to remove any distraction when ur doing any productive work like coding or studying 
 
 
-### Features:
-* **Focus Timer:** Set a session timer while studying or working to keep yourself accountable.
-* **Custom Blocklist:** Dynamically add websites you want to avoid during focus sessions (e.g., YouTube, social media) to automatically block distractions.
+
+# How do u use it ? U might ask 
+
+
+
+First  click the code button in my repository
+
+<img width="1860" height="1011" alt="image" src="https://github.com/user-attachments/assets/fbd5b861-ad5d-44dc-a62e-b4ff1a60b023" />  
+
+after that download the zip file and extract  it using winrar or other extracting  software or window default software  
+
+after u extract it.
+Open any browser u use and go to the the extension manager button then from there on the devloper option at the right top and the click load the unpacked and select the file u extracted .
+
+
+<img width="1432" height="871" alt="image" src="https://github.com/user-attachments/assets/2ebe1d63-c328-4969-a64a-629745739b66" />
+
+
+ # U will see the ui of my extension 
+ 
+<img width="1859" height="1045" alt="image" src="https://github.com/user-attachments/assets/3d9546ca-7345-4df8-a23a-52b4ff9a9a2b" />
+
+# Feature
+In this extension u will get a dynamic site adding system and timer when u r studing or doing somethind important u dont want yourself to get distracted on the timer and blocked the website u want to avoid the distraction from like when working i usually scroll youtube so i block that like this u will use this extension 
